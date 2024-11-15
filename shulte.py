@@ -30,13 +30,15 @@ class ShulteTable:
         if number == 1 and self.start_time is None:
             self.start_time = time.time()
             print("Вы начали! Время запущено.")
-
-        if number == self.last_number:
+        
+        if number == self.last_number and self.current_number == self.last_number:
             if self.start_time is not None:
                 elapsed_time = time.time() - self.start_time
                 print(f"Вы закончили! Время: {elapsed_time:.2f} секунд.")
         elif number == self.current_number:
             self.current_number += 1
+        else:
+            print(f"Ошибка! Вы должны нажать {self.current_number}.")
 
 mainwindow = tk.Tk()
 shulte_app = ShulteTable(mainwindow)
