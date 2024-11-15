@@ -1,5 +1,7 @@
 import tkinter as tk
+from tkinter import messagebox
 import random
+import time
 
 class ShulteTable:
     def __init__(self, master):
@@ -9,6 +11,10 @@ class ShulteTable:
         self.size = 5
         self.numbers = list(range(1, self.size**2 + 1))
         random.shuffle(self.numbers)
+
+        self.start_time = None
+        self.last_number = self.size**2
+        self.current_number = 1
 
         self.buttons = []
         for i in range(self.size):
@@ -21,7 +27,16 @@ class ShulteTable:
             self.buttons.append(row_buttons)
 
     def on_click(self, number):
-        print(f"Вы нажали на число: {number}")
+        if number == 1 and self.start_time is None:
+            self.start_time = time.time()
+            print("Вы начали! Время запущено.")
+
+        if number == self.last_number:
+            if self.start_time is not None:
+                elapsed_time = time.time() - self.start_time
+                print(f"Вы закончили! Время: {elapsed_time:.2f} секунд.")
+        elif number == self.current_number:
+            self.current_number += 1
 
 mainwindow = tk.Tk()
 shulte_app = ShulteTable(mainwindow)
