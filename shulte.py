@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import simpledialog, messagebox
 import random
 import time
+import sys
 
 
 
@@ -15,17 +16,23 @@ def get_two_variables():
                 var2 = int(var2)
                 if (var1 > 0) and (var2 > 0):
                     root.quit()
+                    button_submit.destroy()
+                    button_exit.pack(pady = 10)
+                    label_error1.pack(pady = 3)
                     label_error1["text"] = f"Для изменения размеров таблицы\nШульте, перезапустите программу"
                     return var1, var2
                 else:
+                    label_error1.pack(pady = 5)
                     label_error1["text"] = "Введите положительные значения"
                     root.update()
                     pass
             else:
+                label_error1.pack(pady = 5)
                 label_error1["text"] = "Введите числовые значения"
                 root.update()
                 pass
-
+    def exit():
+        sys.exit()
 
     root = tk.Tk()
     root.title("Введите размеры таблицы")
@@ -45,8 +52,9 @@ def get_two_variables():
     button_submit = tk.Button(root, text="Подтвердить", command=submit)
     button_submit.pack(pady=20)
 
+    button_exit = tk.Button(root, text="Выйти", command=exit)
+
     label_error1 = tk.Label(root, text="")
-    label_error1.pack(pady=5)
 
     root.mainloop()
 
