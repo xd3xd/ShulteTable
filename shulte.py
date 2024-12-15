@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import simpledialog, messagebox
 import random
 import time
 
@@ -12,6 +13,26 @@ def val(n):
                 n = input("Введите натуральное число: ")
         except:
             n = input("Вы ввели не число. Введите снова: ")
+
+def get_table_size():
+    while True:
+        size_width_input = simpledialog.askstring("Размер таблицы Шульте", "Введите размер таблицы по ширине:")
+        size_lenght_input = simpledialog.askstring("Размер таблицы Шульте", "Введите размер таблицы по высоте:")
+
+        if (size_width_input is None) or (size_lenght_input is None):
+            return None
+
+        if size_width_input.isdigit() and (size_lenght_input.isdigit()):
+            size_width_input = int(size_width_input)
+            size_lenght_input = int(size_lenght_input)
+            if (size_width_input > 0) and (size_lenght_input > 0):
+                return size_width_input, size_lenght_input
+            else:
+                messagebox.showerror("Ошибка", "Размер таблицы должен быть положительным числом.")
+        else:
+            messagebox.showerror("Ошибка", "Пожалуйста, введите корректное число.")
+        
+        return [size_width_input, size_lenght_input]
 
 class ShulteTable:
     def __init__(self, master):
@@ -56,8 +77,10 @@ class ShulteTable:
         else:
             print(f"Ошибка! Вы должны нажать {self.current_number}.")
 
-n = val("Введите размер поля по ширине: ")
-m = val("Введите размер поля по высоте: ")
+table_size = get_table_size()
+if table_size is not None:
+    n = table_size[0]
+    m = table_size[1]
 
 mainwindow = tk.Tk()
 shulte_app = ShulteTable(mainwindow)
