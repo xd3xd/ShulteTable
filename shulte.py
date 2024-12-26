@@ -1,10 +1,7 @@
 import tkinter as tk
-from tkinter import simpledialog, messagebox
 import random
 import time
-from datetime import datetime
 import sys
-import threading
 
 start_time = 0
 timer_running = False
@@ -60,27 +57,26 @@ def get_two_variables():
     return int(entry_var1.get()), int(entry_var2.get())
 
 def info():
-    global k, timer_running, start_game, end_game, curr_num
+    global k, timer_running, start_game, end_game, main, curr_num
     if k == 0:
         info_root = tk.Tk()
         info_root.title("Информация")
-        info_root.resizable(True,True)
-        info_root.geometry("300x150+800+100")
+        info_root.resizable(False, False)
+        info_root.geometry("310x150+800+100")
         k+=1
 
         def start_game():
             global start_time, timer_running
             start_time = time.time()
             timer_running = True
-            if timer_running == True:
-                update_timer()
+            update_timer()
         
         def end_game():
             global timer_running
             timer_running = False
             elapsed_time = time.time() - start_time
-            timer_label.config(f"Вы закончили! Время: {elapsed_time:.2f} секунд")
-            error_label.config(f"")
+            timer_label.config(text = f"Вы закончили! Время: {elapsed_time:.2f} секунд")
+            error_label.config(text = f"")
 
         def update_timer():
             if timer_running:
@@ -88,8 +84,6 @@ def info():
                 timer_label.config(text=f"Время: {elapsed_time:.2f} секунд")
                 error_label.config(text=f"Следующее число: {curr_num}")
                 info_root.after(100, update_timer)
-            else:
-                end_game()
 
         def exit():
             sys.exit()
@@ -101,7 +95,7 @@ def info():
         error_label.pack(pady = 10)
 
         button_exit = tk.Button(info_root, text="Выйти", command=exit)
-        button_exit.pack(pady = 10)
+        button_exit.pack(pady = 5)
 
 class ShulteTable:
     def __init__(self, master):
@@ -142,9 +136,7 @@ class ShulteTable:
             label = self.labels[number]
             label.config(fg = 'white')
             label.unbind("<Button-1>")
-            if self.start_time is not None:
-                self.start_time = None
-                end_game()
+            end_game()
 
         elif number == self.current_number:
             self.current_number += 1
