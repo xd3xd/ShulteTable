@@ -8,6 +8,7 @@ import threading
 
 start_time = 0
 timer_running = False
+curr_num = 1
 k = 0
 
 def get_two_variables():
@@ -59,12 +60,12 @@ def get_two_variables():
     return int(entry_var1.get()), int(entry_var2.get())
 
 def info():
-    global k, timer_running, start_game, end_game
+    global k, timer_running, start_game, end_game, curr_num
     if k == 0:
         info_root = tk.Tk()
         info_root.title("Информация")
         info_root.resizable(True,True)
-        info_root.geometry("300x100+800+100")
+        info_root.geometry("300x150+800+100")
         k+=1
 
         def start_game():
@@ -78,12 +79,14 @@ def info():
             global timer_running
             timer_running = False
             elapsed_time = time.time() - start_time
-            timer_label["text"]=(f"Вы закончили! Время: {elapsed_time:.2f} секунд")
+            timer_label.config(f"Вы закончили! Время: {elapsed_time:.2f} секунд")
+            error_label.config(f"")
 
         def update_timer():
             if timer_running:
                 elapsed_time = time.time() - start_time
                 timer_label.config(text=f"Время: {elapsed_time:.2f} секунд")
+                error_label.config(text=f"Следующее число: {curr_num}")
                 info_root.after(100, update_timer)
             else:
                 end_game()
@@ -94,18 +97,19 @@ def info():
         timer_label = tk.Label(info_root, text="Время: 0.00 секунд", font=("Times New Roman", 14, "bold"))
         timer_label.pack(pady = 10)
 
+        error_label = tk.Label(info_root, text=f"Следующее число: {curr_num}")
+        error_label.pack(pady = 10)
+
         button_exit = tk.Button(info_root, text="Выйти", command=exit)
         button_exit.pack(pady = 10)
 
 class ShulteTable:
     def __init__(self, master):
-        global label,info_root
         self.master = master
         self.master.title("Таблица Шульте")
         self.master.resizable(False,False)
         self.master.geometry("+400+100")
     
-
         self.rows = n
         self.columns = m
         self.numbers = list(range(1, n * m + 1))
@@ -116,6 +120,7 @@ class ShulteTable:
         self.last_number = self.rows * self.columns
 
         self.labels = {}
+
         k = 0
 
         for i in range(self.rows):
@@ -128,7 +133,7 @@ class ShulteTable:
                 k += 1
 
     def on_click(self, number):
-        global start_game, end_game
+        global start_game, end_game, curr_num
 
         if number == 1 and self.start_time is None:
             start_game()
@@ -143,11 +148,10 @@ class ShulteTable:
 
         elif number == self.current_number:
             self.current_number += 1
+            curr_num = self.current_number
             label = self.labels[number]
             label.config(fg = 'white')
             label.unbind("<Button-1>")
-        else:
-            print(f"Ошибка! Вы должны нажать {self.current_number}.")
 
 
 
