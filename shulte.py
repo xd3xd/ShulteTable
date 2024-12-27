@@ -3,23 +3,22 @@ import random
 import time
 import sys
 
-start_time = 0
-timer_running = False
-curr_num = 1
-k = 0
+
+
 
 def get_two_variables():
     def submit():
         while True:
             var1 = entry_var1.get()
             var2 = entry_var2.get()
+
             if (var1.strip("-").isdigit()) and (var2.strip("-").isdigit()):
                 var1 = int(var1)
                 var2 = int(var2)
+
                 if (var1 > 0) and (var2 > 0):
                     root.quit()
                     button_submit.destroy()
-                    label_error1.pack(pady = 3)
                     return var1, var2
                 else:
                     label_error1.pack(pady = 5)
@@ -58,44 +57,43 @@ def get_two_variables():
 
 def info():
     global k, timer_running, start_game, end_game, main, curr_num
-    if k == 0:
-        info_root = tk.Tk()
-        info_root.title("Информация")
-        info_root.resizable(False, False)
-        info_root.geometry("310x150+800+100")
-        k+=1
 
-        def start_game():
-            global start_time, timer_running
-            start_time = time.time()
-            timer_running = True
-            update_timer()
-        
-        def end_game():
-            global timer_running
-            timer_running = False
+    def start_game():
+        global start_time, timer_running
+        start_time = time.time()
+        timer_running = True
+        update_timer()
+    
+    def end_game():
+        global timer_running
+        timer_running = False
+        elapsed_time = time.time() - start_time
+        timer_label.config(text = f"Вы закончили! Время: {elapsed_time:.2f} секунд")
+        error_label.config(text = f"")
+
+    def update_timer():
+        if timer_running:
             elapsed_time = time.time() - start_time
-            timer_label.config(text = f"Вы закончили! Время: {elapsed_time:.2f} секунд")
-            error_label.config(text = f"")
+            timer_label.config(text=f"Время: {elapsed_time:.2f} секунд")
+            error_label.config(text=f"Следующее число: {curr_num}")
+            info_root.after(100, update_timer)
 
-        def update_timer():
-            if timer_running:
-                elapsed_time = time.time() - start_time
-                timer_label.config(text=f"Время: {elapsed_time:.2f} секунд")
-                error_label.config(text=f"Следующее число: {curr_num}")
-                info_root.after(100, update_timer)
+    def exit():
+        sys.exit()
 
-        def exit():
-            sys.exit()
+    info_root = tk.Tk()
+    info_root.title("Информация")
+    info_root.resizable(False, False)
+    info_root.geometry("310x150+800+100")
 
-        timer_label = tk.Label(info_root, text="Время: 0.00 секунд", font=("Times New Roman", 14, "bold"))
-        timer_label.pack(pady = 10)
+    timer_label = tk.Label(info_root, text="Время: 0.00 секунд", font=("Times New Roman", 14, "bold"))
+    timer_label.pack(pady = 10)
 
-        error_label = tk.Label(info_root, text=f"Следующее число: {curr_num}")
-        error_label.pack(pady = 10)
-
-        button_exit = tk.Button(info_root, text="Выйти", command=exit)
-        button_exit.pack(pady = 5)
+    error_label = tk.Label(info_root, text=f"Следующее число: {curr_num}")
+    error_label.pack(pady = 10)
+    
+    button_exit = tk.Button(info_root, text="Выйти", command=exit)
+    button_exit.pack(pady = 5)
 
 class ShulteTable:
     def __init__(self, master):
@@ -146,6 +144,9 @@ class ShulteTable:
             label.unbind("<Button-1>")
 
 
+start_time = 0
+timer_running = False
+curr_num = 1
 
 n, m = get_two_variables()
 mainwindow = tk.Tk()
