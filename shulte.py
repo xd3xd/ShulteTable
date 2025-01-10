@@ -3,18 +3,19 @@ import random
 import time
 import sys
 
-start_time = 0
-timer_running = False
-curr_num = 1
+
+
 
 def get_two_variables():
     def submit():
         while True:
             var1 = entry_var1.get()
             var2 = entry_var2.get()
+
             if (var1.strip("-").isdigit()) and (var2.strip("-").isdigit()):
                 var1 = int(var1)
                 var2 = int(var2)
+
                 if (var1 > 0) and (var2 > 0):
                     root.quit()
                     button_submit.destroy()
@@ -56,11 +57,6 @@ def get_two_variables():
 
 def info():
     global k, timer_running, start_game, end_game, main, curr_num
-    
-    info_root = tk.Tk()
-    info_root.title("Информация")
-    info_root.resizable(False, False)
-    info_root.geometry("310x150+800+100")
 
     def start_game():
         global start_time, timer_running
@@ -84,6 +80,11 @@ def info():
 
     def exit():
         sys.exit()
+
+    info_root = tk.Tk()
+    info_root.title("Информация")
+    info_root.resizable(False, False)
+    info_root.geometry("310x150+800+100")
 
     timer_label = tk.Label(info_root, text="Время: 0.00 секунд", font=("Times New Roman", 14, "bold"))
     timer_label.pack(pady = 10)
@@ -143,6 +144,9 @@ class ShulteTable:
             label.unbind("<Button-1>")
 
 
+start_time = 0
+timer_running = False
+curr_num = 1
 
 n, m = get_two_variables()
 mainwindow = tk.Tk()
